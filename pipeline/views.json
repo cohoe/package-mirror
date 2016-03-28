@@ -1,0 +1,18 @@
+[
+    {
+        "view": {
+            "name": "CentOS",
+            "type": "listview",
+            "description": "centos mirror jobs",
+            "regex": "rh-centos.*"
+        }
+    },
+    {
+        "view": {
+            "name": "EPEL",
+            "type": "listview",
+            "description": "epel mirror jobs",
+            "regex": "rh-epel.*"
+        }
+    }
+]

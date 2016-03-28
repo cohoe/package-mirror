@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Written by Grant Cohoe
+
+set -e
+
+MOUNTPOINT=/mnt/pub
+MIRROR=http://mirror.umd.edu
+LFTP=/usr/bin/lftp
+
+echo "## Checking for mountpoint"
+mount_ret=`/bin/mount | grep $USER`
+
+if [ ! "$mount_ret" ]; then
+    echo "ERR: You need to mount the pub directory first"
+fi
+
+echo "## Changing directory"
+if [ -d $MOUNTPOINT/EPEL-NG ]; then
+    cd $MOUNTPOINT/EPEL-NG/
+else
+    echo "ERR: Version directory does not exist"
+    exit 1
+fi
+#echo "## Updating package directories"
+#for subdir in $(find ./* -maxdepth 0 -type d | sed 's/\.\///g'); do
+#    echo "## Mirroring $subdir"
+#    cd $subdir
+#    mirror_url="$MIRROR/epel/$subdir"
+#    $LFTP -e "open $mirror_url && mirror -c --delete --only-missing . && exit"
+#    cd ..
+#done
+
+mirror_url="$MIRROR/fedora/epel/"
+$LFTP -e "open $mirror_url && mirror -c --delete --only-missing . && exit"
+
+pwd
+
+echo "## Repodata"
+for dir in $(find ./* -type d -name repodata | sed 's/\.\///g'); do
+    echo "## Updating $dir"
+    cd $dir
+    $LFTP -e "open $mirror_url/$dir && mirror -c . && exit"
+    cd $MOUNTPOINT/EPEL-NG
+done
+
+echo "## Done"
+cd ..

@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Written by Grant Cohoe
+
+VERSION=$1
+MOUNTPOINT=/mnt/pub
+MIRROR=http://mirror.umd.edu/centos
+LFTP=/usr/bin/lftp
+
+if [ ! $VERSION ]; then
+    echo "ERR: Need to specify version to mirror"
+    exit 1
+fi
+
+echo "## Checking for mountpoint"
+mount_ret=`/bin/mount | grep $USER`
+
+if [ ! "$mount_ret" ]; then
+    echo "ERR: You need to mount the pub directory first"
+fi
+
+echo "## Changing directory"
+if [ -d $MOUNTPOINT/centos/$VERSION ]; then
+    cd $MOUNTPOINT/centos/$VERSION
+else
+    echo "ERR: Version directory does not exist"
+    exit 1
+fi
+echo "## Updating package directories"
+for subdir in *; do
+    echo "## Mirroring $subdir"
+    cd $subdir
+    mirror_url="$MIRROR/$VERSION/$subdir"
+    $LFTP -e "open $mirror_url && mirror -c --only-missing . && exit"
+    cd ..
+done
+
+echo "## Repodata"
+for dir in $(find ./* -type d -name repodata | sed 's/\.\///g'); do
+    echo "## Updating $dir"
+    cd $dir
+    $LFTP -e "open $MIRROR/$VERSION/$dir && mirror -c . && exit"
+    cd $MOUNTPOINT/centos/$VERSION
+done
+
+echo "## Done"
+cd ..

@@ -1,0 +1,51 @@
+#!/bin/bash
+
+set -e
+
+# Grant Cohoe
+
+if [ "$(id -u)" != "0" ]; then
+	echo "Sorry, you are not root."
+	exit 1
+fi
+
+current_version=`cat /etc/redhat-release | cut -d ' ' -f 3`
+
+echo "# Current version: $current_version"
+
+if [ ! $1 ]; then
+	echo "You need to specify what version I should update to"
+	exit
+fi
+
+next_version=$1
+
+echo "# Next version: $next_version"
+
+echo "# Updating your current install"
+yum update --disablerepo=epel
+if [ $? != 0 ]; then
+    echo "# Your current install is broken. Fix it before updating"
+    exit
+fi
+
+echo "# Stopping Puppet"
+service puppet stop
+
+echo "# Cleaning up yum cache"
+yum clean all
+
+echo "# Cleaning up old kernels"
+yum install yum-utils -y
+package-cleanup --oldkernels --count=2
+
+echo "# Updating yum repos"
+sed -i "s/$current_version/$next_version/g" /etc/yum.repos.d/*.repo
+
+echo "# Updating"
+yum update --disablerepo=epel
+
+echo "# Starting Puppet"
+service puppet start
+
+echo "# Done. You should reboot now."

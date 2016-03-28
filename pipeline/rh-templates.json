@@ -1,0 +1,89 @@
+[
+    {
+        "job": {
+            "name": "rh-{{product}}-{{version}}-mirror",
+            "description": "<img src=\"/job/rh-{{product}}-{{version}}-mirror/buildTimeGraph/png\" />",
+            "scm_provider": "git",
+            "scm_url": "{{repopath}}",
+            "scm_branch": "master",
+            "shell_command": "bash scripts/rh-mirror-launcher.sh",
+            "parameters": [
+                {
+                    "name": "baseurl",
+                    "type": "string",
+                    "default": "{{upstream_host}}/{{product}}",
+                    "description": "The base URL of the repository. This should point to the root product directory in the upstream (ex: http://mirror.rit.edu/centos). Do not include a version directory here."
+                },
+                {
+                    "name": "version",
+                    "type": "string",
+                    "default": "{{version}}",
+                    "description": "The specific version to mirror."
+                },
+                {
+                    "name": "fspath",
+                    "type": "string",
+                    "default": "{{fsroot}}/{{product}}",
+                    "description": "The root filesystem path to store in. Similar to the baseurl, this should be for the product and not the specific version (ex: /mnt/pub/centos)."
+                },
+                {
+                    "name": "repoonly",
+                    "type": "string",
+                    "default": "",
+                    "description": "Mirror repodata only. Any value will trigger Yes."
+                },
+                {
+                    "name": "http_proxy",
+                    "type": "string",
+                    "default": "{{http_proxy}}",
+                    "description": "HTTP proxy to use for connections."
+                }
+            ],
+            "triggers": {
+                "periodic_build": "H H(19-23) * * *"
+            },
+            "publishers": {
+                "email_notifications": {
+                    "recipients": "{{maillist}}",
+                    "send_if_unstable": "true"
+                }
+            }
+        }
+    },
+    {
+        "job": {
+            "name": "rh-{{product}}-{{release}}-linker",
+            "description": "",
+            "scm_provider": "git",
+            "scm_url": "{{repopath}}",
+            "scm_branch": "master",
+            "shell_command": "bash scripts/rh-linker-launcher.sh",
+            "parameters": [
+                {
+                    "name": "fspath",
+                    "type": "string",
+                    "default": "{{fsroot}}/{{product}}",
+                    "description": "The root filesystem path to store in. This should be for the product and not the specific version (ex: /mnt/pub/centos)."
+                },
+                {
+                    "name": "source",
+                    "type": "string",
+                    "default": "{{version}}",
+                    "description": "The source directory of the link (ex: 6.7)."
+                },
+                {
+                    "name": "destination",
+                    "type": "string",
+                    "default": "{{release}}",
+                    "description": "The destination of the link (ex: 6)."
+                }
+            ],
+            "publishers": {
+                "email_notifications": {
+                    "recipients": "{{maillist}}",
+                    "send_if_unstable": "true"
+                }
+            }
+        }
+    }
+]

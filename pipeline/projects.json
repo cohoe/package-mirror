@@ -1,0 +1,87 @@
+[
+    {
+        "defaults": {
+            "description": "Do not edit in web!",
+            "upstream_host": "http://mirror.rit.edu",
+            "fsroot": "/rsa/libhq/pub/test",
+            "http_proxy": "http://emc-proxy1:82",
+            "repopath": "https://github/cohoeg/mirror",
+            "maillist": "grant.cohoe@rsa.com"
+        }
+    },
+    {
+        "project": {
+            "name": "CentOS6-Mirror",
+            "product": "centos",
+            "release": "6",
+            "jobs": [
+                {
+                    "rh-{{product}}-{{release}}-linker": {
+                        "version": "6.7"
+                    }
+                },
+                {
+                    "rh-{{product}}-{{version}}-mirror": {
+                        "version": "6.7"
+                    }
+                },
+                {
+                    "rh-{{product}}-{{version}}-mirror": {
+                        "version": "6.2"
+                    }
+                }
+            ],
+            "views": [
+                "CentOS"
+            ]
+        }
+    },
+    {
+        "project": {
+            "name": "CentOS7-Mirror",
+            "product": "centos",
+            "release": "7",
+            "jobs": [
+                {
+                    "rh-{{product}}-{{release}}-linker": {
+                        "version": "7.2.1511"
+                    }
+                },
+                {
+                    "rh-{{product}}-{{version}}-mirror": {
+                        "version": "7.2.1511"
+                    }
+                }
+            ],
+            "views": [
+                "CentOS"
+            ]
+        }
+    },
+    {
+        "project": {
+            "name": "EPEL-Mirror",
+            "product": "epel",
+            "jobs": [
+                {
+                    "rh-{{product}}-{{version}}-mirror": {
+                        "version": "7"
+                    }
+                },
+                {
+                    "rh-{{product}}-{{version}}-mirror": {
+                        "version": "6"
+                    }
+                },
+                {
+                    "rh-{{product}}-{{version}}-mirror": {
+                        "version": "5"
+                    }
+                }
+            ],
+            "views": [
+                "EPEL"
+            ]
+        }
+    }
+]
