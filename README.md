@@ -37,7 +37,8 @@ All mirror projects are currently defined in ```projects.json```. The basic skel
         "jobs": [
             {
                 "my-{{product}}-{{release}}-linker": {
-                    "version": "5.1" (This is where you specify the active version)
+                    "version": "5.1", (This is where you specify the active version)
+                    "disabled": false (Turn this job on or off)
                 ,
             },
             {

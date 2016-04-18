@@ -2,11 +2,12 @@
     {
         "defaults": {
             "description": "Do not edit in web!",
-            "upstream_host": "http://mirror.rit.edu",
+            "upstream_host": "http://mirror.rit.edu/centos",
             "fsroot": "/rsa/libhq/pub/test",
             "http_proxy": "http://emc-proxy1:82",
-            "repopath": "https://github/cohoeg/mirror",
-            "maillist": "grant.cohoe@rsa.com"
+            "repopath": "https://github.rsa.lab.emc.com/cohoeg/mirror",
+            "maillist": "grant.cohoe@rsa.com",
+            "disabled": false
         }
     },
     {
@@ -27,7 +28,9 @@
                 },
                 {
                     "rh-{{product}}-{{version}}-mirror": {
-                        "version": "6.2"
+                        "version": "6.2",
+                        "disabled": true,
+                        "upstream_host": "http://vault.centos.org"
                     }
                 }
             ],

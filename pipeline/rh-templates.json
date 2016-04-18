@@ -7,11 +7,12 @@
             "scm_url": "{{repopath}}",
             "scm_branch": "master",
             "shell_command": "bash scripts/rh-mirror-launcher.sh",
+            "disabled": "{{disabled}}",
             "parameters": [
                 {
                     "name": "baseurl",
                     "type": "string",
-                    "default": "{{upstream_host}}/{{product}}",
+                    "default": "{{upstream_host}}",
                     "description": "The base URL of the repository. This should point to the root product directory in the upstream (ex: http://mirror.rit.edu/centos). Do not include a version directory here."
                 },
                 {
